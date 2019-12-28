@@ -12,10 +12,12 @@ use Doctrine\Common\Persistence\ObjectManager;
 //use Doctrine\DBAL\Types\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class BlogController extends AbstractController
 {
-    /**
+    /** afficher tous les articles
+     * 
      * @Route("/blog", name="blog")
      */
     public function index(ArticleRepository $repo)
@@ -33,7 +35,8 @@ class BlogController extends AbstractController
         ]);
     }
 
-    /**
+    /** afficher la page d'acceuil
+     * 
      * @Route("/", name="home")
      */
     public function home()
@@ -41,7 +44,8 @@ class BlogController extends AbstractController
         return $this->render('blog/home.html.twig');
     }
 
-    /**
+    /** Créer un article
+     * 
      * @Route("/blog/new", name="blog_create")
      */
     public function create(Request $request /*, ObjectManager $manager*/)
@@ -57,26 +61,34 @@ class BlogController extends AbstractController
                 //tableau d'option, attribut html
                 'attr' => [
                     'placeholder' => "Titre de l'article"
-                ]
+                ],
+                'label' => 'Titre'
             ])
             ->add('content', TextareaType::class, [
                 'attr' => [
                     'placeholder' => "Contenu de l'article"
-                ]
+                ],
+                'label' => 'Contenu'
             ])
             ->add('image', TextType::class, [
                 'attr' => [
                     'placeholder' => "Image de l'article"
-                ]
+                ],
+                'label' => 'Image'
             ])
+            /* ajout du button submit
+            ->add('save', SubmitType::class, [
+                'label' => 'Enregistrer'
+            ])*/
             ->getForm();//faire le resultat
-        dump($form);
+
         return $this->render('blog/create.html.twig', [
             'formArticle' => $form->createView() //envoyer le résultat de la fonction createView() et pas l'objet $form
         ]);
     }
 
-    /**
+    /** afficher un article précis
+     * 
      * route parametrer
      * @Route("/blog/{id}", name="blog_show")
      */
