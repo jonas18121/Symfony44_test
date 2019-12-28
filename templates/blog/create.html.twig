@@ -9,22 +9,36 @@
 
     {{ form_start(formArticle) }}
 
-    {# <div clacc="form-group">
-        <label for="">Titre</label>
-        {{ form_widget(formArticle.title) }}
-    </div>
+    {# Bonne pratique
+        form_row() permet d'ajouter tous les options que l'on veut dans 
+        un champ input (attr , label, error), ça évite de le faire dans le controller 
+    #}
+    {{ 
+        form_row(formArticle.title, {
+            'attr': {
+                'placeholder': "Titre de l'article"
+            },
+            'label': "Titre"
+        }) 
+    }}
 
-    <div clacc="form-group">
-        <label for="">Contenu</label>
-        {{ form_widget(formArticle.content) }}
-    </div>
+    {{ 
+        form_row(formArticle.content, {
+            'attr': {
+                'placeholder': "Contenu de l'article"
+            },
+            'label': "Conetnu"
+        }) 
+    }}
 
-    <div clacc="form-group">
-        <label for="">Image</label>
-        {{ form_widget(formArticle.image) }}
-    </div> #}
-
-    {{ form_widget(formArticle) }}
+    {{  
+        form_row(formArticle.image, {
+            'attr': {
+                'placeholder': "URL de l'image"
+            },
+            'label': "Image"
+        }) 
+    }}
     
     <button type="submit" class="btn btn-primary">Ajouter l'article</button>
 
