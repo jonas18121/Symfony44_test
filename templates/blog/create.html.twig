@@ -1,9 +1,33 @@
 {% extends 'base.html.twig' %}
 
+{# design de formulaire #}
+{% form_theme formArticle 'bootstrap_4_layout.html.twig' %}
+
 {% block body %}
 
     <h1>Création d'un article !</h1>
 
-    {{ form(formArticle) }}
+    {{ form_start(formArticle) }}
+
+    {# <div clacc="form-group">
+        <label for="">Titre</label>
+        {{ form_widget(formArticle.title) }}
+    </div>
+
+    <div clacc="form-group">
+        <label for="">Contenu</label>
+        {{ form_widget(formArticle.content) }}
+    </div>
+
+    <div clacc="form-group">
+        <label for="">Image</label>
+        {{ form_widget(formArticle.image) }}
+    </div> #}
+
+    {{ form_widget(formArticle) }}
+    
+    <button type="submit" class="btn btn-primary">Ajouter l'article</button>
+
+    {{ form_end(formArticle) }}
 
 {% endblock %}
