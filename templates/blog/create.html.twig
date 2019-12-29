@@ -5,7 +5,13 @@
 
 {% block body %}
 
-    <h1>Création d'un article !</h1>
+    <h1>
+        {% if editMode %}
+            Modifier un article !
+        {% else %}
+            Création d'un article !
+        {% endif %}    
+    </h1>
 
     {{ form_start(formArticle) }}
 
@@ -40,7 +46,13 @@
         }) 
     }}
     
-    <button type="submit" class="btn btn-primary">Ajouter l'article</button>
+    <button type="submit" class="btn btn-primary">
+        {% if editMode %}
+            Enregistrer les modifications
+        {% else %}    
+            Ajouter l'article
+        {% endif %}    
+    </button>
 
     {{ form_end(formArticle) }}
 

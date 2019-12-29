@@ -5,12 +5,15 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use App\Entity\Article;
-use App\Repository\ArticleRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
+use App\Entity\Article;
+use App\Repository\ArticleRepository;
+use App\Form\ArticleType;
+
+use Doctrine\ORM\EntityManagerInterface;
 
 /* 
 Dans les controllers remplacer 
@@ -49,24 +52,33 @@ class BlogController extends AbstractController
         return $this->render('blog/home.html.twig');
     }
 
-    /** Créer un article
+    /** Créer ou modifier un article 
+     * cette fonction peut être appeler par 2 route différentes
      * 
      * @Route("/blog/new", name="blog_create")
+     * @Route("/blog/{id}/edit", name="blog_edit")
      */
-    public function create(Request $request , EntityManagerInterface $manager)
+    public function form(Article $article = null, Request $request , EntityManagerInterface $manager)
     {
-        $article = new Article();
+        if(!$article){
+            $article = new Article();
+        }
+        
 
         /*
             créer un objet Form pour faire un formulaire pour les articles
             l'objet form est complexe et possède beaucoup d'éléments dedans 
-        */
+        
+            si je crée moi meme
         $form = $this->createFormBuilder($article)
             ->add('title')
             ->add('content')
             ->add('image')
             ->getForm();//faire le resultat
 
+            sinon si je le crée avec la CLI
+        */
+        $form = $this->createForm(ArticleType::class, $article);
 
         /* en post
         analyse la requête http, passer en paramètre 
@@ -79,7 +91,10 @@ class BlogController extends AbstractController
         //si le formulaire a été soumi et est valide
         if($form->isSubmitted() && $form->isValid())
         {
-            $article->setCreatedAt(new \DateTime());
+            if(!$article->getId()){
+                $article->setCreatedAt(new \DateTime());
+            }
+            
 
             $manager->persist($article);
             $manager->flush();
@@ -89,7 +104,8 @@ class BlogController extends AbstractController
         }
 
         return $this->render('blog/create.html.twig', [
-            'formArticle' => $form->createView() //envoyer le résultat de la fonction createView() et pas l'objet $form
+            'formArticle' => $form->createView(), //envoyer le résultat de la fonction createView() et pas l'objet $form
+            'editMode' => ($article->getId() !== null)
         ]);
     }
 
