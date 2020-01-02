@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
 use App\Form\ArticleType;
+use App\Entity\Comment;
+use App\Form\CommentType;
 
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -114,18 +116,28 @@ class BlogController extends AbstractController
      * route parametrer
      * @Route("/blog/{id}", name="blog_show")
      */
-    public function show(Article $article)
+    public function show(Article $article, Request $request, EntityManagerInterface $manager)
     {
-        /* 
-        public function show(ArticleRepository $repo, $id)
-        {
-        acceder à ArticleRepository.php qui gère la selection 
-        $repo = $this->getDoctrine()->getRepository(Article::class);
-        $article = $repo->find($id);
-        */
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+
+        $form->handleRequest($request);
+        
+        if($form->isSubmitted() && $form->isValid()){
+
+            $comment->setCreatedAt(new \DateTime())
+                    ->setArticle($article);
+
+            $manager->persist($comment);
+            $manager->flush();
+
+            return $this->redirectToRoute('blog_show', ['id' => $article->getId()]);
+        }
+
 
         return $this->render('blog/show.html.twig',[
-            'article' => $article
+            'article' => $article,
+            'commentForm' => $form->createView()
         ]);
     }
 }
