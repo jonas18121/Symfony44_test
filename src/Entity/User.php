@@ -39,14 +39,13 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min="8", minMessage="Votre mot de passe doit faire minimum 8 caractères")
-     * 
      */
     private $password;
 
     /**
      * @Assert\EqualTo(propertyPath="password", message="Les 2 mot de passe sont différements") // $passeword = $confirm_passeword
      */
-    public $confirm_password;
+    private $confirm_password;
 
     public function getId(): ?int
     {
@@ -96,5 +95,25 @@ class User implements UserInterface
     public function getRoles() 
     {
         return ['ROLE_USER'];
+    }
+
+    /**
+     * Get the value of confirm_password
+     */ 
+    public function getConfirmPassword()
+    {
+        return $this->confirm_password;
+    }
+
+    /**
+     * Set the value of confirm_password
+     *
+     * @return  self
+     */ 
+    public function setConfirmPassword($confirm_password)
+    {
+        $this->confirm_password = $confirm_password;
+
+        return $this;
     }
 }

@@ -5,7 +5,7 @@
 <h1>connexion</h1>
 
 <form action="{{ path('security_login') }}" method="post">
-
+    {# Nom des champs pris en compte pour la connexion par Symfony _username et _password #}
     <div class="form-group">
         <input placeholder="Adresse email ..." name="_username" type="text" class="form-control" required>
     </div>
