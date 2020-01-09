@@ -1,20 +1,20 @@
 security:
     encoders:
         App\Entity\User:
-            algorithm: bcrypt # hashage a base de rain de sel 
+            algorithm: bcrypt # hashage de mot de passe de l'entité User 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-    providers:
+    providers: # providers = utilisateur
         in_memory: { memory: null }
         in_database:
             entity:
                 class: App\Entity\User
-                property: email
+                property: email # faudra chercher l'utilisateur grace au champs email et ensuite vérifie le mot de passe
     firewalls:
-        dev:
+        dev: # accès à ces fichiers en developpement
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: lazy
+            anonymous: lazy     # ce connecter en anonyme
 
             provider: in_database
 
@@ -24,7 +24,7 @@ security:
 
             logout:
                 path: security_logout
-                target: blog
+                target: blog # on va dans la route qui s'appelle blog , après la déconnexion
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
